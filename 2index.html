@@ -198,4 +198,236 @@
         /* 樣式三：活潑積木 */
         .style-3 {
             background-color: #fff;
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; /* 雲
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; /* 雲朵不規則 */
+            border: 4px dashed #FFCC80;
+            color: #3E2723;
+        }
+
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.7);
+            font-family: inherit;
+        }
+        textarea.form-input { resize: none; height: 80px; }
+
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div class="bg-decor cloud">☁️</div>
+    <div class="bg-decor star">✨</div>
+    <div class="bg-decor feet">👣</div>
+
+    <div id="page-1" class="page active">
+        <h1>寶貝駕到！<br>性別揭曉派對！</h1>
+        <div class="img-box">
+            <img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/cover.jpg" alt="Cover" onerror="this.src='https://placehold.co/600x400/FFF3E0/8D6E63?text=Baby+Party'">
+        </div>
+        <p>親愛的朋友們，感謝您來參加我們的寶寶性別派對！在揭曉寶寶的性別之前，先來玩個小遊戲，憑您的直覺，猜猜看是小王子還是小公主呢？</p>
+        <button class="btn" onclick="nextPage(2)">開始猜猜樂<br><small style="font-size:0.8rem; font-weight:normal;">提供給各位線索:超音波照片！</small></button>
+    </div>
+
+    <div id="page-2" class="page">
+        <h1>Hi 親愛的朋友~~</h1>
+        <p>跟大家公布一個好消息~<span class="highlight">我懷孕了！</span><br>
+        很開心能夠將這個好消息跟大家公布，目前已經第 5 個月，寶寶的心跳、發展各方面都正常，感謝上帝~</p>
+        <div class="img-box">
+            <img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/cover2.jpg" alt="Ultrasound" onerror="this.src='https://placehold.co/600x400/ECEFF1/607D8B?text=Ultrasound+Photo'">
+        </div>
+        <p>請依據這張超音波照，一起來與我們享受這新生命的期待！</p>
+        <button class="btn" onclick="nextPage(3)">進入性別預測 ➜</button>
+    </div>
+
+    <div id="page-3" class="page">
+        <h1>直覺大考驗！<br>猜猜是男孩還是女孩？</h1>
+        <p>根據您最近的夢境、寶寶的胎動，或是純粹的第六感，您覺得會是…</p>
+        
+        <div class="mystery-box">👶❓</div>
+
+        <div class="guess-options">
+            <div class="guess-btn boy" onclick="selectGender('Boy', this)">
+                <div class="icon-lg">🏀📚</div>
+                <div>男孩 (Boy)</div>
+            </div>
+            <div class="guess-btn girl" onclick="selectGender('Girl', this)">
+                <div class="icon-lg">💐👗</div>
+                <div>女孩 (Girl)</div>
+            </div>
+        </div>
+        
+        <button class="btn" onclick="submitGuess()">送出你的答案！</button>
+    </div>
+
+    <div id="page-4" class="page">
+        <h1>感謝您的參與！</h1>
+        <div class="img-box">
+            <img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/coming_soon.jpg" alt="Coming Soon" onerror="this.src='https://placehold.co/600x400/FFF8E1/FF8F00?text=Coming+Soon'">
+        </div>
+        <p>您的答案和祝福都已經收到囉！感謝您與我們一同分享這份喜悅與期待。<br>結果即將揭曉，請準備好一同見證這幸福的時刻！</p>
+        <button class="btn" onclick="nextPage(5)">揭曉結果 🎉</button>
+    </div>
+
+    <div id="page-5" class="page">
+        <h1 style="color:#1565C0">答案揭曉！<br>是位小王子！</h1>
+        <div class="img-box">
+            <img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/result.jpg" alt="Result Boy" onerror="this.src='https://placehold.co/600x400/E3F2FD/1565C0?text=It\'s+a+Boy!'">
+        </div>
+        <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 10px; text-align: left;">
+            <p><strong>恭喜！我們即將迎來一位可愛的小男孩！</strong></p>
+            <p>感謝大家的祝福！寶寶小名叫<span class="highlight">小麥</span>。</p>
+            <p>這是媽媽夢見的畫面：在一個黃澄澄的稻田中，有著一個又一個垂墜、豐盈的麥子結實累累。</p>
+            <p style="text-align: center; color: #F57F17; font-weight: bold; margin-top: 10px;">期待與大家明年4月見面~~</p>
+        </div>
+        <button class="btn" onclick="nextPage(6)">留下您的祝福 ✉️</button>
+    </div>
+
+    <div id="page-6" class="page">
+        <h1>留下您的祝福</h1>
+        <p style="font-size: 0.9rem; margin-bottom: 10px;">請選擇一張喜歡的卡片樣式寫信給我們：</p>
+
+        <div class="style-switcher">
+            <div class="style-tab active" onclick="setStyle(1, this)">陽光溫暖</div>
+            <div class="style-tab" onclick="setStyle(2, this)">夢幻星空</div>
+            <div class="style-tab" onclick="setStyle(3, this)">活潑積木</div>
+        </div>
+
+        <div id="card-area" class="card-container style-1">
+            <div id="decor-container"></div> <h2 style="margin-top:0; text-align: center;">給小寶貝的祝福</h2>
+            
+            <div class="form-group">
+                <label>您的名字是？</label>
+                <input type="text" id="name" class="form-input" placeholder="請輸入您的姓名">
+            </div>
+            
+            <div class="form-group">
+                <label id="msg-label">給小寶貝的祝福！</label>
+                <textarea id="message" class="form-input" placeholder="不論男孩女孩，都希望寶寶健康快樂成長！"></textarea>
+            </div>
+        </div>
+
+        <button class="btn" style="background-color: #81C784; color: #fff;" onclick="sendEmail()">寄出電子小卡 💌</button>
+    </div>
+
+</div>
+
+<script>
+    // 狀態變數
+    let currentGuess = null;
+    let currentStyle = 1;
+
+    // 換頁功能
+    function nextPage(pageNum) {
+        // 隱藏所有頁面
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        // 顯示目標頁面
+        const target = document.getElementById('page-' + pageNum);
+        target.classList.add('active');
+        // 捲動到頂部
+        document.getElementById('app').scrollTo(0,0);
+        window.scrollTo(0,0);
+    }
+
+    // 性別選擇
+    function selectGender(gender, btn) {
+        currentGuess = gender;
+        // 清除樣式
+        document.querySelectorAll('.guess-btn').forEach(b => b.classList.remove('selected'));
+        // 加上選取樣式
+        btn.classList.add('selected');
+    }
+
+    // 送出猜測
+    function submitGuess() {
+        if(!currentGuess) {
+            alert("請先點選一個直覺選項喔！");
+            return;
+        }
+        nextPage(4);
+    }
+
+    // 設定卡片風格
+    function setStyle(styleNum, tabElement) {
+        currentStyle = styleNum;
+        
+        // 更新 Tab 樣式
+        document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
+        tabElement.classList.add('active');
+
+        // 更新卡片外觀
+        const card = document.getElementById('card-area');
+        const decor = document.getElementById('decor-container');
+        const msgLabel = document.getElementById('msg-label');
+        
+        // 清除舊 class，加入新 class
+        card.className = `card-container style-${styleNum}`;
+        
+        // 根據風格改變內容
+        if(styleNum === 1) {
+            // 陽光溫暖
+            msgLabel.innerText = "給小寶貝的祝福！";
+            decor.innerHTML = `
+                <span class="decor" style="top:5px; left:5px;">🧸</span>
+                <span class="decor" style="top:5px; right:5px;">🐴</span>
+                <span class="decor" style="bottom:5px; left:5px;">🍼</span>
+                <span class="decor" style="bottom:5px; right:5px;">👣</span>
+            `;
+        } else if(styleNum === 2) {
+            // 夢幻星空
+            msgLabel.innerText = "想對寶寶說的悄悄話？";
+            decor.innerHTML = `
+                <span class="decor" style="top:30%; left:-5px; color:#FFD54F;">⭐</span>
+                <span class="decor" style="top:50%; right:-5px; color:#B2DFDB;">☁️</span>
+                <span class="decor" style="top:10%; right:10px; font-size:1.5rem;">🎈</span>
+            `;
+        } else if(styleNum === 3) {
+            // 活潑積木
+            msgLabel.innerText = "給小寶貝的祝福！";
+            decor.innerHTML = `
+                <span class="decor" style="top:-10px; left:10px; transform:rotate(-15deg); font-size:1.5rem;">🚗</span>
+                <span class="decor" style="bottom:-10px; right:10px; transform:rotate(15deg); font-size:1.5rem;">🦆</span>
+                <span class="decor" style="top:50%; left:-10px; color:#F48FB1;">■</span>
+                <span class="decor" style="top:20%; right:-10px; color:#90CAF9;">●</span>
+            `;
+        }
+    }
+
+    // 寄信功能：***** 已修正為強制開啟 Gmail 網頁版 *****
+    function sendEmail() {
+        const name = document.getElementById('name').value;
+        const msg = document.getElementById('message').value;
+        const recipientEmail = "xiaomai050204@gmail.com"; // 收件者 Email
+        
+        if(!name || !msg) {
+            alert("請記得輸入名字和祝福語喔！");
+            return;
+        }
+
+        let styleName = "";
+        if(currentStyle === 1) styleName = "【陽光溫暖・經典款】";
+        if(currentStyle === 2) styleName = "【夢幻星空・中性優雅款】";
+        if(currentStyle === 3) styleName = "【活潑可愛・積木風】";
+
+        const subject = `來自 ${name} 的寶寶祝福小卡`;
+        
+        // 為了網頁版 Gmail，換行符號用 %0A 代替
+        const body = `親愛的爸爸媽媽：%0A%0A我是 ${name}，%0A%0A${msg}%0A%0A(發送自：${styleName}電子小卡)`;
+        
+        // 構造 Gmail 連結
+        const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipientEmail}&su=${encodeURIComponent(subject)}&body=${body}`;
+
+        // 在新的視窗或標籤頁開啟 Gmail
+        window.open(gmailLink, '_blank');
+    }
+
+    // 初始化裝飾
+    setStyle(1, document.querySelector('.style-tab'));
+
+</script>
+</body>
+</html>
