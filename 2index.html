@@ -4,348 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>寶貝駕到！性別揭曉派對</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Varela+Round&display=swap" rel="stylesheet">
     <style>
-        /* --- 全局設定 --- */
+        /* --- 全域設定 --- */
         :root {
-            --bg-color: #FFF9F0; /* 米白色 */
-            --accent-color: #FFD57E; /* 溫暖黃 */
-            --text-color: #6B5B55; /* 深咖啡色 */
-            --boy-color: #AECBEB; /* 柔和藍 */
-            --girl-color: #F7C8D0; /* 柔和粉 */
+            --bg-color: #FDFBF7; /* 輕柔米白 */
+            --text-color: #5D4037; /* 深咖啡色 */
+            --btn-color: #FFD54F; /* 溫暖黃 */
+            --btn-text: #4E342E;
+            --boy-color: #90CAF9;
+            --girl-color: #F48FB1;
+            
+            /* 卡片配色 */
+            --card-1-bg: #FFFDE7;
+            --card-2-bg: #E0F2F1;
+            --card-3-bg: #FFF3E0;
         }
 
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: linear-gradient(180deg, #FFF9F0 0%, #FFF0F5 100%);
+            margin: 0;
+            padding: 0;
+            font-family: 'Varela Round', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-color);
             color: var(--text-color);
-            min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
+            min-height: 100vh;
         }
 
-        /* --- 背景裝飾 (雲朵/星星) --- */
-        .decoration {
+        /* 手機版面模擬容器 */
+        #app {
+            width: 100%;
+            max-width: 480px;
+            background: #fff;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 背景裝飾 */
+        .bg-decor {
             position: absolute;
-            opacity: 0.3;
             z-index: 0;
             pointer-events: none;
-            animation: float 6s infinite ease-in-out;
+            opacity: 0.6;
         }
-        .cloud-1 { top: 5%; left: -10%; font-size: 3rem; animation-delay: 0s; }
-        .cloud-2 { top: 20%; right: -5%; font-size: 2.5rem; animation-delay: 2s; }
-        .star-1 { bottom: 15%; left: 10%; font-size: 1.5rem; color: #FFD700; animation-delay: 1s; }
-        .star-2 { top: 10%; right: 20%; font-size: 1.2rem; color: #FFD700; animation-delay: 3s; }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
+        .cloud { top: 20px; left: -20px; font-size: 3rem; opacity: 0.5; animation: float 6s ease-in-out infinite; }
+        .star { top: 80px; right: 10px; font-size: 1.5rem; color: #FFD54F; animation: twinkle 3s infinite; }
+        .feet { bottom: 20px; left: 20px; font-size: 2rem; opacity: 0.2; transform: rotate(15deg); }
 
-        /* --- 容器 --- */
-        .container {
-            width: 90%;
-            max-width: 450px; /* 手機寬度限制 */
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            z-index: 10;
-            min-height: 600px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            transition: height 0.3s ease;
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes twinkle { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* --- 頁面切換控制 --- */
+        /* 頁面切換機制 */
         .page {
             display: none;
-            width: 100%;
-            animation: fadeIn 0.8s ease;
-        }
-        .page.active {
-            display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+            z-index: 1;
+            flex: 1;
         }
+        .page.active { display: flex; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- 圖片樣式 --- */
-        .image-container {
+        /* 圖片容器 */
+        .img-box {
             width: 100%;
-            max-width: 280px;
-            height: 280px; /* 固定高度避免跳動 */
-            margin: 15px 0;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-            border: 4px solid #fff;
-            background-color: #EEE; /* 圖片載入前的底色 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background-color: #eee;
         }
-
-        .main-img {
+        .img-box img {
             width: 100%;
-            height: 100%;
-            object-fit: cover; /* 確保圖片填滿但不變形 */
+            height: auto;
+            display: block;
         }
 
-        /* --- 文字排版 --- */
-        h1 {
-            font-size: 1.5rem;
-            color: #E69A8D;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        
-        p {
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
+        /* 文字樣式 */
+        h1 { font-size: 1.6rem; color: #8D6E63; margin-bottom: 10px; line-height: 1.4; }
+        h2 { font-size: 1.3rem; color: #795548; margin-bottom: 15px; }
+        p { font-size: 1rem; line-height: 1.6; color: #6D4C41; margin-bottom: 20px; text-align: justify; }
+        .highlight { color: #FF7043; font-weight: bold; }
 
-        /* --- 按鈕樣式 --- */
+        /* 按鈕樣式 */
         .btn {
-            background-color: var(--accent-color);
-            color: #fff;
+            background-color: var(--btn-color);
+            color: var(--btn-text);
             border: none;
-            padding: 12px 30px;
+            padding: 15px 30px;
             border-radius: 50px;
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(255, 213, 126, 0.5);
-            transition: transform 0.2s, background 0.2s;
-            width: 80%;
-            margin-top: 10px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            width: 90%;
+            box-shadow: 0 4px 0 #FBC02D;
+            transition: all 0.1s;
+            margin-top: auto; /* 將按鈕推到底部 */
+            margin-bottom: 20px;
         }
+        .btn:active { transform: translateY(4px); box-shadow: none; }
 
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        /* --- 輸入框樣式 (Page 2) --- */
-        .input-group {
-            width: 100%;
-            text-align: left;
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #8C7B75;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #EEE;
-            border-radius: 12px;
-            font-size: 1rem;
-            background: #FFFEFC;
-            outline: none;
-        }
-        
-        input:focus, textarea:focus {
-            border-color: var(--accent-color);
-        }
-
-        /* --- 性別選擇按鈕 (Page 3) --- */
-        .gender-btn-container {
+        /* Page 3: 性別猜測 */
+        .guess-options {
             display: flex;
-            gap: 15px;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .gender-btn {
-            flex: 1;
-            padding: 20px 10px;
-            border-radius: 15px;
-            border: 2px solid transparent;
-            background: #fff;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .gender-btn.boy { border-color: var(--boy-color); color: #5D8AA8; }
-        .gender-btn.girl { border-color: var(--girl-color); color: #D67A8A; }
-
-        .gender-btn i { font-size: 2rem; }
-        
-        .gender-btn.selected {
-            background: #f0f0f0;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-
-        .gender-btn.boy.selected { background: var(--boy-color); color: white; }
-        .gender-btn.girl.selected { background: var(--girl-color); color: white; }
-
-        /* --- 結果頁 (Page 5) --- */
-        .reveal-box {
-            background-color: #FFF;
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px dashed var(--accent-color);
-            margin-top: 10px;
-        }
-        .highlight {
-            color: #E69A8D;
-            font-weight: bold;
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="decoration cloud-1">☁️</div>
-    <div class="decoration cloud-2">☁️</div>
-    <div class="decoration star-1">✨</div>
-    <div class="decoration star-2">⭐</div>
-
-    <div class="container">
-        
-        <div id="page1" class="page active">
-            <h1>寶貝駕到！<br>性別揭曉派對！</h1>
-            <p>親愛的朋友們，感謝您來參加我們的寶寶性別派對！在揭曉寶寶的性別之前，先來玩個小遊戲，憑您的直覺，猜猜看是小王子還是小公主呢？</p>
-            
-            <div class="image-container">
-                <img src="cover.jpg" alt="寶寶插畫" class="main-img" onerror="this.onerror=null;this.src='https://placehold.co/400x400/FFF9F0/E69A8D?text=Baby+Illustration';">
-            </div>
-            
-            <button class="btn" onclick="nextPage(2)">開始猜猜樂！</button>
-        </div>
-
-        <div id="page2" class="page">
-            <div style="font-size: 3rem; margin-bottom: 10px;">🧸🍼</div>
-            <h1>留下您的祝福</h1>
-            
-            <div class="input-group">
-                <label>您的名字是？</label>
-                <input type="text" id="guestName" placeholder="請輸入您的姓名">
-            </div>
-
-            <div class="input-group">
-                <label>想對寶寶說的悄悄話？</label>
-                <textarea rows="4" placeholder="不論男孩女孩，都希望寶寶健康快樂成長！"></textarea>
-            </div>
-
-            <button class="btn" onclick="validateAndNext(3)">下一步</button>
-        </div>
-
-        <div id="page3" class="page">
-            <h1>直覺大考驗！<br>猜猜是男孩還是女孩？</h1>
-            <p>根據您最近的夢境、寶寶的胎動，或是純粹的第六感，您覺得會是…</p>
-            
-            <div style="font-size: 4rem; margin: 10px 0;">❓</div>
-
-            <div class="gender-btn-container">
-                <div class="gender-btn boy" onclick="selectGender('boy', this)">
-                    <i style="filter: hue-rotate(200deg);">👣</i> 
-                    <span>男孩 (Boy)</span>
-                </div>
-                <div class="gender-btn girl" onclick="selectGender('girl', this)">
-                    <i>🌸</i> 
-                    <span>女孩 (Girl)</span>
-                </div>
-            </div>
-
-            <button class="btn" id="submitGuessBtn" style="margin-top: 30px; opacity: 0.5; pointer-events: none;" onclick="nextPage(4)">送出你的答案！</button>
-        </div>
-
-        <div id="page4" class="page">
-            <h1>感謝您的參與！</h1>
-            <p>您的答案和祝福都已經收到囉！感謝您與我們一同分享這份喜悅與期待。結果即將揭曉，請準備好一同見證這幸福的時刻！</p>
-            
-            <div class="image-container" style="position: relative;">
-                <img src="coming_soon.jpg" alt="Coming Soon" class="main-img" onerror="this.onerror=null;this.src='https://placehold.co/400x400/FFF9F0/E69A8D?text=Coming+Soon';">
-                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.7); font-weight: bold; color: #E69A8D; padding: 10px;">Coming Soon!</div>
-            </div>
-
-            <button class="btn" style="background-color: #E69A8D;" onclick="nextPage(5)">揭曉答案</button>
-        </div>
-
-        <div id="page5" class="page">
-            <h1 style="color: #5D8AA8;">答案揭曉！<br>是位小王子！👑</h1>
-            
-            <div class="image-container" style="border-color: var(--boy-color);">
-                <img src="result.jpg" alt="小麥照片" class="main-img" onerror="this.onerror=null;this.src='https://placehold.co/400x400/AECBEB/fff?text=It\'s+a+Boy!';">
-            </div>
-            
-            <div class="reveal-box">
-                <p>恭喜！我們即將迎來一位可愛的小男孩！感謝大家的祝福！</p>
-                <p>寶寶小名叫<span class="highlight">「小麥」</span>🌾</p>
-                <p style="font-size: 0.9rem; color: #888; text-align: left; margin-top: 10px;">這是媽媽夢見的畫面，在一個黃澄澄的稻田中，有著一個又一個垂墜、豐盈的麥子結實累累。</p>
-                <br>
-                <p style="font-weight: bold; color: #5D8AA8;">期待與大家明年 4 月見面~~</p>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        // 頁面切換邏輯
-        function nextPage(pageNumber) {
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.remove('active'));
-
-            const targetPage = document.getElementById('page' + pageNumber);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
-            window.scrollTo(0, 0);
-        }
-
-        // 第二頁驗證
-        function validateAndNext(nextPageNum) {
-            const name = document.getElementById('guestName').value;
-            if (name.trim() === "") {
-                alert("請告訴我們您的名字唷！");
-                return;
-            }
-            nextPage(nextPageNum);
-        }
-
-        // 第三頁性別選擇邏輯
-        function selectGender(gender, element) {
-            document.querySelectorAll('.gender-btn').forEach(btn => btn.classList.remove('selected'));
-            element.classList.add('selected');
-
-            const submitBtn = document.getElementById('submitGuessBtn');
-            submitBtn.style.opacity = '1';
-            submitBtn.style.pointerEvents = 'auto';
-            submitBtn.style.backgroundColor = gender === 'boy' ? 'var(--boy-color)' : 'var(--girl-color)';
-        }
-    </script>
-</body>
-</html>
+            justify-content: center
