@@ -5,216 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>寶貝駕到！性別揭曉派對</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Varela+Round&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
-        /* --- 全域設定 --- */
+        /* --- 全域設定 (維持不變) --- */
         :root {
-            --bg-color: #FDFBF7; /* 輕柔米白 */
-            --text-color: #5D4037; /* 深咖啡色 */
-            --btn-color: #FFD54F; /* 溫暖黃 */
-            --btn-text: #4E342E;
-            --boy-color: #90CAF9;
-            --girl-color: #F48FB1;
-            
-            /* 卡片配色 */
-            --card-1-bg: #FFFDE7;
-            --card-2-bg: #E0F2F1;
-            --card-3-bg: #FFF3E0;
+            --bg-color: #FDFBF7; --text-color: #5D4037; --btn-color: #FFD54F; --btn-text: #4E342E;
+            --card-1-bg: #FFFDE7; --card-2-bg: #E0F2F1; --card-3-bg: #FFF3E0;
         }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Varela Round', 'Noto Sans TC', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        /* 手機版面模擬容器 */
-        #app {
-            width: 100%;
-            max-width: 480px;
-            background: #fff;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; padding: 0; font-family: 'Varela Round', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; min-height: 100vh; }
+        #app { width: 100%; max-width: 480px; background: #fff; min-height: 100vh; position: relative; overflow-x: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        
         /* 背景裝飾 */
-        .bg-decor {
-            position: absolute;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.6;
-        }
+        .bg-decor { position: absolute; z-index: 0; pointer-events: none; opacity: 0.6; }
         .cloud { top: 20px; left: -20px; font-size: 3rem; opacity: 0.5; animation: float 6s ease-in-out infinite; }
         .star { top: 80px; right: 10px; font-size: 1.5rem; color: #FFD54F; animation: twinkle 3s infinite; }
         .feet { bottom: 20px; left: 20px; font-size: 2rem; opacity: 0.2; transform: rotate(15deg); }
-
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         @keyframes twinkle { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* 頁面切換機制 */
-        .page {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            padding: 30px 20px;
-            text-align: center;
-            animation: fadeIn 0.6s ease;
-            z-index: 1;
-            flex: 1;
-        }
+        /* 頁面切換 */
+        .page { display: none; flex-direction: column; align-items: center; padding: 30px 20px; text-align: center; animation: fadeIn 0.6s ease; z-index: 1; flex: 1; }
         .page.active { display: flex; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* 圖片容器 */
-        .img-box {
-            width: 100%;
-            border-radius: 20px;
-            overflow: hidden;
-            margin: 20px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            background-color: #eee;
-        }
-        .img-box img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+        .img-box { width: 100%; border-radius: 20px; overflow: hidden; margin: 20px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background-color: #eee; }
+        .img-box img { width: 100%; height: auto; display: block; }
 
         /* 文字樣式 */
         h1 { font-size: 1.6rem; color: #8D6E63; margin-bottom: 10px; line-height: 1.4; }
-        h2 { font-size: 1.3rem; color: #795548; margin-bottom: 15px; }
         p { font-size: 1rem; line-height: 1.6; color: #6D4C41; margin-bottom: 20px; text-align: justify; }
         .highlight { color: #FF7043; font-weight: bold; }
 
         /* 按鈕樣式 */
-        .btn {
-            background-color: var(--btn-color);
-            color: var(--btn-text);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 90%;
-            box-shadow: 0 4px 0 #FBC02D;
-            transition: all 0.1s;
-            margin-top: auto; /* 將按鈕推到底部 */
-            margin-bottom: 20px;
-        }
+        .btn { background-color: var(--btn-color); color: var(--btn-text); border: none; padding: 15px 30px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 90%; box-shadow: 0 4px 0 #FBC02D; transition: all 0.1s; margin-top: auto; margin-bottom: 20px; }
         .btn:active { transform: translateY(4px); box-shadow: none; }
+        .btn:disabled { background-color: #ccc; box-shadow: none; cursor: not-allowed; color: #666; }
 
-        /* Page 3: 性別猜測 */
-        .guess-options {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-            width: 100%;
-        }
-        .guess-btn {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 4px solid #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
+        /* 選項與裝飾 */
+        .guess-options { display: flex; justify-content: center; gap: 20px; margin: 20px 0; width: 100%; }
+        .guess-btn { width: 140px; height: 140px; border-radius: 50%; border: 4px solid #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s; }
         .guess-btn.boy { background: #E3F2FD; color: #1565C0; }
         .guess-btn.girl { background: #FCE4EC; color: #C2185B; }
         .guess-btn.selected { transform: scale(1.1); border-color: #FFD54F; box-shadow: 0 0 15px #FFD54F; }
         .icon-lg { font-size: 2.5rem; margin-bottom: 5px; }
-        
-        .mystery-box {
-            margin: 10px auto;
-            font-size: 4rem;
-            color: #AB47BC; /* 粉紫色 */
-            animation: pulse 2s infinite;
-        }
+        .mystery-box { margin: 10px auto; font-size: 4rem; color: #AB47BC; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        /* Page 6: 電子小卡樣式 */
-        .style-switcher {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-        .style-tab {
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            border: 1px solid #ccc;
-            border-radius: 20px;
-            background: #fff;
-            cursor: pointer;
-        }
+        /* 卡片與樣式切換 */
+        .style-switcher { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .style-tab { padding: 8px 12px; font-size: 0.85rem; border: 1px solid #ccc; border-radius: 20px; background: #fff; cursor: pointer; }
         .style-tab.active { background: #8D6E63; color: #fff; border-color: #8D6E63; }
-
-        .card-container {
-            width: 100%;
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            transition: all 0.5s ease;
-        }
         
-        /* 樣式一：陽光溫暖 */
-        .style-1 {
-            background-color: var(--card-1-bg);
-            border-radius: 15px;
-            border: 2px solid #FFF59D;
-            color: #616161;
-        }
+        /* 為了截圖完整，移除 transition，並確保背景色正確 */
+        .card-container { width: 100%; padding: 20px; margin-bottom: 20px; position: relative; background: #fff; }
+        
+        .style-1 { background-color: var(--card-1-bg); border-radius: 15px; border: 2px solid #FFF59D; color: #616161; }
         .style-1 .decor { position: absolute; font-size: 1.2rem; color: #FFE0B2; }
-        
-        /* 樣式二：夢幻星空 */
-        .style-2 {
-            background-color: var(--card-2-bg);
-            border-radius: 20px 0 20px 0; /* 波浪感 */
-            border: 1px solid #B2DFDB;
-            color: #37474F;
-            box-shadow: 0 0 15px rgba(178, 223, 219, 0.6);
-        }
-        
-        /* 樣式三：活潑積木 */
-        .style-3 {
-            background-color: #fff;
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; /* 雲朵不規則 */
-            border: 4px dashed #FFCC80;
-            color: #3E2723;
-        }
+        .style-2 { background-color: var(--card-2-bg); border-radius: 20px 0 20px 0; border: 1px solid #B2DFDB; color: #37474F; box-shadow: 0 0 15px rgba(178, 223, 219, 0.6); }
+        .style-3 { background-color: #fff; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; border: 4px dashed #FFCC80; color: #3E2723; }
 
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; }
-        .form-input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 8px;
-            background: rgba(255,255,255,0.7);
-            font-family: inherit;
-        }
+        /* 解決 iOS 輸入框放大問題 */
+        .form-input { width: 100%; padding: 10px; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; background: rgba(255,255,255,0.7); font-family: inherit; font-size: 16px; }
         textarea.form-input { resize: none; height: 80px; }
-
     </style>
 </head>
 <body>
@@ -226,62 +84,41 @@
 
     <div id="page-1" class="page active">
         <h1>寶貝駕到！<br>性別揭曉派對！</h1>
-        <div class="img-box">
-            <img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/cover.jpg" alt="Cover" onerror="this.src='https://placehold.co/600x400/FFF3E0/8D6E63?text=Baby+Party'">
-        </div>
+        <div class="img-box"><img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/cover.jpg" alt="Cover" onerror="this.src='https://placehold.co/600x400/FFF3E0/8D6E63?text=Baby+Party'"></div>
         <p>親愛的朋友們，感謝您來參加我們的寶寶性別派對！在揭曉寶寶的性別之前，先來玩個小遊戲，憑您的直覺，猜猜看是小王子還是小公主呢？</p>
-        <button class="btn" onclick="nextPage(2)">開始猜猜樂<br><small style="font-size:0.8rem; font-weight:normal;">提供給各位線索:超音波照片！</small></button>
+        <button class="btn" onclick="nextPage(2)">開始猜猜樂</button>
     </div>
 
     <div id="page-2" class="page">
         <h1>Hi 親愛的朋友~~</h1>
-        <p>跟大家公布一個好消息~<span class="highlight">我懷孕了！</span><br>
-        很開心能夠將這個好消息跟大家公布，目前已經第 5 個月，寶寶的心跳、發展各方面都正常，感謝上帝~</p>
-        <div class="img-box">
-            <img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/cover2.jpg" alt="Ultrasound" onerror="this.src='https://placehold.co/600x400/ECEFF1/607D8B?text=Ultrasound+Photo'">
-        </div>
-        <p>請依據這張超音波照，一起來與我們享受這新生命的期待！</p>
+        <p>跟大家公布一個好消息~<span class="highlight">我懷孕了！</span><br>目前已經第 5 個月，寶寶的心跳、發展各方面都正常，感謝上帝~</p>
+        <div class="img-box"><img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/cover2.jpg" alt="Ultrasound" onerror="this.src='https://placehold.co/600x400/ECEFF1/607D8B?text=Ultrasound+Photo'"></div>
         <button class="btn" onclick="nextPage(3)">進入性別預測 ➜</button>
     </div>
 
     <div id="page-3" class="page">
-        <h1>直覺大考驗！<br>猜猜是男孩還是女孩？</h1>
-        <p>根據您最近的夢境、寶寶的胎動，或是純粹的第六感，您覺得會是…</p>
-        
+        <h1>直覺大考驗！</h1>
         <div class="mystery-box">👶❓</div>
-
         <div class="guess-options">
-            <div class="guess-btn boy" onclick="selectGender('Boy', this)">
-                <div class="icon-lg">🏀📚</div>
-                <div>男孩 (Boy)</div>
-            </div>
-            <div class="guess-btn girl" onclick="selectGender('Girl', this)">
-                <div class="icon-lg">💐👗</div>
-                <div>女孩 (Girl)</div>
-            </div>
+            <div class="guess-btn boy" onclick="selectGender('Boy', this)"><div class="icon-lg">🏀📚</div><div>男孩 (Boy)</div></div>
+            <div class="guess-btn girl" onclick="selectGender('Girl', this)"><div class="icon-lg">💐👗</div><div>女孩 (Girl)</div></div>
         </div>
-        
         <button class="btn" onclick="submitGuess()">送出你的答案！</button>
     </div>
 
     <div id="page-4" class="page">
         <h1>感謝您的參與！</h1>
-        <div class="img-box">
-            <img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/coming_soon.jpg" alt="Coming Soon" onerror="this.src='https://placehold.co/600x400/FFF8E1/FF8F00?text=Coming+Soon'">
-        </div>
-        <p>您的答案和祝福都已經收到囉！感謝您與我們一同分享這份喜悅與期待。<br>結果即將揭曉，請準備好一同見證這幸福的時刻！</p>
+        <div class="img-box"><img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/coming_soon.jpg" alt="Coming Soon" onerror="this.src='https://placehold.co/600x400/FFF8E1/FF8F00?text=Coming+Soon'"></div>
+        <p>結果即將揭曉，請準備好一同見證這幸福的時刻！</p>
         <button class="btn" onclick="nextPage(5)">揭曉結果 🎉</button>
     </div>
 
     <div id="page-5" class="page">
         <h1 style="color:#1565C0">答案揭曉！<br>是位小王子！</h1>
-        <div class="img-box">
-            <img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/result.jpg" alt="Result Boy" onerror="this.src='https://placehold.co/600x400/E3F2FD/1565C0?text=It\'s+a+Boy!'">
-        </div>
+        <div class="img-box"><img src="https://raw.githubusercontent.com/xiaomai050204-jpg/-party/main/result.jpg" alt="Result Boy" onerror="this.src='https://placehold.co/600x400/E3F2FD/1565C0?text=It\'s+a+Boy!'"></div>
         <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 10px; text-align: left;">
             <p><strong>恭喜！我們即將迎來一位可愛的小男孩！</strong></p>
             <p>感謝大家的祝福！寶寶小名叫<span class="highlight">小麥</span>。</p>
-            <p>這是媽媽夢見的畫面：在一個黃澄澄的稻田中，有著一個又一個垂墜、豐盈的麥子結實累累。</p>
             <p style="text-align: center; color: #F57F17; font-weight: bold; margin-top: 10px;">期待與大家明年4月見面~~</p>
         </div>
         <button class="btn" onclick="nextPage(6)">留下您的祝福 ✉️</button>
@@ -289,7 +126,7 @@
 
     <div id="page-6" class="page">
         <h1>留下您的祝福</h1>
-        <p style="font-size: 0.9rem; margin-bottom: 10px;">請選擇一張喜歡的卡片樣式寫信給我們：</p>
+        <p style="font-size: 0.9rem; margin-bottom: 10px;">請選擇卡片並填寫，傳送給我們：</p>
 
         <div class="style-switcher">
             <div class="style-tab active" onclick="setStyle(1, this)">陽光溫暖</div>
@@ -298,136 +135,141 @@
         </div>
 
         <div id="card-area" class="card-container style-1">
-            <div id="decor-container"></div> <h2 style="margin-top:0; text-align: center;">給小寶貝的祝福</h2>
-            
+            <div id="decor-container"></div> 
+            <h2 style="margin-top:0; text-align: center;">給小寶貝的祝福</h2>
             <div class="form-group">
                 <label>您的名字是？</label>
-                <input type="text" id="name" class="form-input" placeholder="請輸入您的姓名">
+                <input type="text" id="name" class="form-input" placeholder="請輸入姓名">
             </div>
-            
             <div class="form-group">
                 <label id="msg-label">給小寶貝的祝福！</label>
-                <textarea id="message" class="form-input" placeholder="不論男孩女孩，都希望寶寶健康快樂成長！"></textarea>
+                <textarea id="message" class="form-input" placeholder="寫下對寶寶的祝福..."></textarea>
             </div>
+            <div style="text-align: right; font-size: 0.7rem; opacity: 0.6; margin-top: 10px;">From: 寶寶性別揭曉派對</div>
         </div>
 
-        <button class="btn" style="background-color: #81C784; color: #fff;" onclick="sendEmail()">寄出電子小卡 💌</button>
+        <button id="send-btn" class="btn" style="background-color: #06C755; color: #fff;" onclick="captureAndShare()">
+            📸 下載卡片並傳Line
+        </button>
+        <p id="line-hint" style="font-size: 0.8rem; color: #E65100; margin-top: 5px; display: none; background: #FFF3E0; padding: 10px; border-radius: 8px;">
+            <strong>步驟：</strong><br>
+            1. 卡片圖片已下載到手機相簿。<br>
+            2. 網頁將跳轉至 Line。<br>
+            3. 請在 Line 聊天室點選「相簿」選擇剛剛的圖片傳給我們！
+        </button>
     </div>
 
 </div>
 
 <script>
-    // 狀態變數
+    // --- 基礎功能變數 ---
     let currentGuess = null;
     let currentStyle = 1;
 
-    // 換頁功能
+    // --- 頁面切換 ---
     function nextPage(pageNum) {
-        // 隱藏所有頁面
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        // 顯示目標頁面
-        const target = document.getElementById('page-' + pageNum);
-        target.classList.add('active');
-        // 捲動到頂部
+        document.getElementById('page-' + pageNum).classList.add('active');
         document.getElementById('app').scrollTo(0,0);
         window.scrollTo(0,0);
     }
 
-    // 性別選擇
+    // --- 遊戲邏輯 ---
     function selectGender(gender, btn) {
         currentGuess = gender;
-        // 清除樣式
         document.querySelectorAll('.guess-btn').forEach(b => b.classList.remove('selected'));
-        // 加上選取樣式
         btn.classList.add('selected');
     }
-
-    // 送出猜測
     function submitGuess() {
-        if(!currentGuess) {
-            alert("請先點選一個直覺選項喔！");
-            return;
-        }
+        if(!currentGuess) { alert("請先點選一個直覺選項喔！"); return; }
         nextPage(4);
     }
 
-    // 設定卡片風格
+    // --- 卡片樣式切換 ---
     function setStyle(styleNum, tabElement) {
         currentStyle = styleNum;
-        
-        // 更新 Tab 樣式
         document.querySelectorAll('.style-tab').forEach(t => t.classList.remove('active'));
         tabElement.classList.add('active');
 
-        // 更新卡片外觀
         const card = document.getElementById('card-area');
         const decor = document.getElementById('decor-container');
         const msgLabel = document.getElementById('msg-label');
         
-        // 清除舊 class，加入新 class
         card.className = `card-container style-${styleNum}`;
         
-        // 根據風格改變內容
         if(styleNum === 1) {
-            // 陽光溫暖
             msgLabel.innerText = "給小寶貝的祝福！";
-            decor.innerHTML = `
-                <span class="decor" style="top:5px; left:5px;">🧸</span>
-                <span class="decor" style="top:5px; right:5px;">🐴</span>
-                <span class="decor" style="bottom:5px; left:5px;">🍼</span>
-                <span class="decor" style="bottom:5px; right:5px;">👣</span>
-            `;
+            decor.innerHTML = `<span class="decor" style="top:5px; left:5px;">🧸</span><span class="decor" style="top:5px; right:5px;">🐴</span><span class="decor" style="bottom:5px; left:5px;">🍼</span><span class="decor" style="bottom:5px; right:5px;">👣</span>`;
         } else if(styleNum === 2) {
-            // 夢幻星空
             msgLabel.innerText = "想對寶寶說的悄悄話？";
-            decor.innerHTML = `
-                <span class="decor" style="top:30%; left:-5px; color:#FFD54F;">⭐</span>
-                <span class="decor" style="top:50%; right:-5px; color:#B2DFDB;">☁️</span>
-                <span class="decor" style="top:10%; right:10px; font-size:1.5rem;">🎈</span>
-            `;
+            decor.innerHTML = `<span class="decor" style="top:30%; left:-5px; color:#FFD54F;">⭐</span><span class="decor" style="top:50%; right:-5px; color:#B2DFDB;">☁️</span><span class="decor" style="top:10%; right:10px; font-size:1.5rem;">🎈</span>`;
         } else if(styleNum === 3) {
-            // 活潑積木
             msgLabel.innerText = "給小寶貝的祝福！";
-            decor.innerHTML = `
-                <span class="decor" style="top:-10px; left:10px; transform:rotate(-15deg); font-size:1.5rem;">🚗</span>
-                <span class="decor" style="bottom:-10px; right:10px; transform:rotate(15deg); font-size:1.5rem;">🦆</span>
-                <span class="decor" style="top:50%; left:-10px; color:#F48FB1;">■</span>
-                <span class="decor" style="top:20%; right:-10px; color:#90CAF9;">●</span>
-            `;
+            decor.innerHTML = `<span class="decor" style="top:-10px; left:10px; transform:rotate(-15deg); font-size:1.5rem;">🚗</span><span class="decor" style="bottom:-10px; right:10px; transform:rotate(15deg); font-size:1.5rem;">🦆</span><span class="decor" style="top:50%; left:-10px; color:#F48FB1;">■</span><span class="decor" style="top:20%; right:-10px; color:#90CAF9;">●</span>`;
         }
     }
 
-    // 寄信功能：***** 已修正為強制開啟 Gmail 網頁版 *****
-    function sendEmail() {
+    // --- ★★★ 核心功能：截圖並跳轉 Line ★★★ ---
+    function captureAndShare() {
         const name = document.getElementById('name').value;
         const msg = document.getElementById('message').value;
-        const recipientEmail = "xiaomai050204@gmail.com"; // 收件者 Email
-        
-        if(!name || !msg) {
+        const cardArea = document.getElementById('card-area');
+        const btn = document.getElementById('send-btn');
+        const hint = document.getElementById('line-hint');
+
+        if (!name || !msg) {
             alert("請記得輸入名字和祝福語喔！");
             return;
         }
 
-        let styleName = "";
-        if(currentStyle === 1) styleName = "【陽光溫暖・經典款】";
-        if(currentStyle === 2) styleName = "【夢幻星空・中性優雅款】";
-        if(currentStyle === 3) styleName = "【活潑可愛・積木風】";
+        // 1. UI 狀態更新
+        btn.disabled = true;
+        btn.innerHTML = "⏳ 正在製作卡片圖檔...";
+        hint.style.display = "block"; // 顯示操作提示
 
-        const subject = `來自 ${name} 的寶寶祝福小卡`;
-        
-        // 為了網頁版 Gmail，換行符號用 %0A 代替
-        const body = `親愛的爸爸媽媽：%0A%0A我是 ${name}，%0A%0A${msg}%0A%0A(發送自：${styleName}電子小卡)`;
-        
-        // 構造 Gmail 連結
-        const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipientEmail}&su=${encodeURIComponent(subject)}&body=${body}`;
+        // 2. 執行截圖
+        html2canvas(cardArea, {
+            scale: 2, // 提高解析度 (2倍) 讓圖片更清晰
+            useCORS: true, // 允許跨域圖片
+            backgroundColor: null // 背景透明或自動
+        }).then(canvas => {
+            
+            // 3. 觸發圖片下載
+            const link = document.createElement('a');
+            link.download = `小寶貝祝福卡_${name}.png`;
+            link.href = canvas.toDataURL("image/png");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
-        // 在新的視窗或標籤頁開啟 Gmail
-        window.open(gmailLink, '_blank');
+            // 4. 準備 Line 文字與連結
+            btn.innerHTML = "✅ 圖片下載完成！正在開啟 Line...";
+            
+            const lineMsg = `我是 ${name}，\n這是給小麥寶寶的祝福卡片！(圖片請手動從相簿上傳)`;
+            // 使用 Line URL Scheme
+            const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(lineMsg)}`;
+
+            // 5. 延遲 1.5 秒後跳轉 (給手機一點時間處理下載)
+            setTimeout(() => {
+                window.location.href = lineUrl;
+                
+                // 重置按鈕
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = "📸 下載卡片並傳Line";
+                }, 1000);
+            }, 1500);
+
+        }).catch(err => {
+            console.error(err);
+            alert("截圖失敗，請您手動手機截圖傳給我們喔！");
+            btn.disabled = false;
+            btn.innerHTML = "📸 下載卡片並傳Line";
+        });
     }
 
-    // 初始化裝飾
+    // 初始化
     setStyle(1, document.querySelector('.style-tab'));
-
 </script>
 </body>
 </html>
